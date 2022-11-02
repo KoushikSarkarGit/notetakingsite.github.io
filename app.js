@@ -1,18 +1,23 @@
-console.log('running');
+// console.log('running');
 shownotes();
 let addbtn = document.getElementById('addbtn');
 addbtn.addEventListener('click', function (e) {
     let addtxt = document.getElementById("addtxt");
+    let addtitle = document.getElementById("addtitle");
     let notes = localStorage.getItem('notes');
 
     if (notes == null) {
+        
         notesobj = [];
     }
     else {
         notesobj = JSON.parse(notes);
     }
-
-    notesobj.push(addtxt.value);
+let fnote ={
+    title: addtitle.value,
+    note: addtxt.value
+}
+    notesobj.push(fnote);
 
     localStorage.setItem('notes', JSON.stringify(notesobj));
     addtxt.value = "";
@@ -34,8 +39,8 @@ function shownotes() {
 
         html += `<div class="card mx-2 my-2 notecard" style="width: 18rem;">
             <div class="card-body">
-                <h5 class="card-title">Note ${index + 1}</h5>
-                <p class="card-text">${element}</p>
+                <h5 class="card-title">Note ${index + 1}:  ${element.title}  </h5>
+                <p class="card-text">${element.note}</p>
                 <button id="${index}" onclick="deleteNote(this.id)" class="btn btn-primary">Delete Note</button>
             </div>
         </div>`
@@ -43,9 +48,12 @@ function shownotes() {
         let notesElm = document.getElementById("notes");
         if (notesObj.length != 0) {
             notesElm.innerHTML = html;
-        } else {
-            notesElm.innerHTML = ` <h5 class='dontknow'> Nothing to show! Use "Add a Note" section above to add notes. </h5>`;
+        } 
+        else {
+            notesElm.innerHTML = ` <h5> Nothing to show! Use "Add a Note" section above to add notes. </h5>`;
         }
+        // shownotes();
+        // document.location.reload();
     });
 }
 
@@ -63,6 +71,7 @@ function deleteNote(index) {
     localStorage.setItem('notes', JSON.stringify(notesObj));
     console.log('running delete');
     shownotes();
+    document.location.reload();
 }
 
 let search = document.getElementById('searchtxt');
